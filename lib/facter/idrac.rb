@@ -1,13 +1,12 @@
 # vim: ts=2 sw=2 expandtab
 
 require 'facter'
-require 'rubygems'
 require 'time'
 
 # Run a command, unless it's already been run and the output is cached.
 def cached_command_output(command, cache_time = 86400)
 
-  cache_directory = '/var/opt/lib/pe-puppet/facts/cached_command_output'
+  cache_directory = '/var/lib/puppet/state/cached_command_output'
   Dir.mkdir cache_directory unless File.exist? cache_directory
 
   cache_file = cache_directory + '/' + command.gsub("/", "_")
@@ -28,7 +27,7 @@ end
 # Are there alternate locations this could be installed?
 if File.exists? '/opt/dell/srvadmin/sbin/racadm'
 
-  Facter.add('dell_has_racadm') do
+  Facter.add('dell_racadm_installed') do
     setcode do
       'true'
     end
@@ -88,7 +87,7 @@ if File.exists? '/opt/dell/srvadmin/sbin/racadm'
   end
 
 else
-  Facter.add('dell_has_racadm') do
+  Facter.add('dell_racadm_installed') do
     setcode do
       'false'
     end
