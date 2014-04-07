@@ -7,8 +7,7 @@ Issues / Limitations
 --------------------
 
 1. There is a lot more this can gather.
-2. It's very explicitly configured for Puppet Enterprise and the RPM installation of srvadmin.  It has no concept of alternative locations to store cached configuration or access the commandline tools.
-
+2. It's explicitly configured for Puppet and standart installation of srvadmin.  It has no concept of alternative locations to store cached configuration or access the commandline tools.
 Goals
 -----
 
