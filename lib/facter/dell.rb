@@ -1,13 +1,12 @@
 # vim: ts=2 sw=2 expandtab
 
 require 'facter'
-require 'rubygems'
 require 'time'
 
 # Run a command, unless it's already been run and the output is cached.
 def cached_command_output(command, cache_time = 86400)
 
-  cache_directory = '/var/opt/lib/pe-puppet/facts/cached_command_output'
+  cache_directory = '/var/lib/puppet/state/cached_command_output'
   Dir.mkdir cache_directory unless File.exist? cache_directory
 
   cache_file = cache_directory + '/' + command.gsub("/", "_")
@@ -185,7 +184,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
       if controller_data_to_gather.member? datapoint
         datapoint_safe_name = datapoint.downcase.gsub(" ", "_")
         fact_name = "#{controller_fact_basename}_#{datapoint_safe_name}"
-        
+
         # Add the Fact
         Facter.add(fact_name) do
           setcode do
@@ -198,7 +197,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
     # Store per-controller Virtual Disk information
     vdisks={}
     this_vdisk=0
-    
+
     cached_command_output("/opt/dell/srvadmin/bin/omreport storage vdisk controller=#{controller_id}").each_line do |line|
       k,v = line.split(/\s+:\s+/)
 
@@ -224,7 +223,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
       vdisk_data.each do |datapoint, value|
         datapoint_safe_name = datapoint.downcase.gsub(" ", "_")
         fact_name = "#{vdisk_fact_basename}_#{datapoint_safe_name}"
-        
+
         # Add the Fact
         Facter.add(fact_name) do
           setcode do
@@ -238,7 +237,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
 
       pdisks={}
       this_pdisk=0
-      
+
       cached_command_output("/opt/dell/srvadmin/bin/omreport storage pdisk controller=#{controller_id} vdisk=#{vdisk_id}").each_line do |line|
         k,v = line.split(/\s+:\s+/)
 
@@ -264,7 +263,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
         pdisk_data.each do |datapoint, value|
           datapoint_safe_name = datapoint.downcase.gsub(" ", "_")
           fact_name = "#{pdisk_fact_basename}_#{datapoint_safe_name}"
-          
+
           if pdisk_data_to_gather.member? datapoint
             # Add the Fact
             Facter.add(fact_name) do
@@ -313,7 +312,7 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
     proc_data.each do |datapoint, value|
       datapoint_safe_name = datapoint.downcase.gsub(" ", "_")
       fact_name = "#{proc_fact_basename}_#{datapoint_safe_name}"
-      
+
       if proc_data_to_gather.member? datapoint
         # Add the Fact
         Facter.add(fact_name) do
