@@ -325,12 +325,5 @@ if File.exist? '/opt/dell/srvadmin/bin/omreport'
 
   end #procs.each
 
-  # Do not cache this output as it will be used by a Puppet module to actually modify the value.
-  Facter.add('dell_front_panel') do
-    setcode do
-      %x{/opt/dell/srvadmin/bin/omreport chassis frontpanel}.grep(/^LCD Line 1/)[0].split(/\s+:\s+/)[1].chomp!
-    end
-  end
-
 end
 
